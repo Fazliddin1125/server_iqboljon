@@ -6,7 +6,7 @@ const cookieParser = require("cookie-parser")
 const fileUpload = require("express-fileupload")
 const errorMiddleware = require("./middleware/error.middleware");
 const usermiddleware = require('./middleware/usermiddleware');
-
+const path = require("path");
 const app = express()
 
 // Middlewares
@@ -18,7 +18,16 @@ app.use(fileUpload())
 
 // Router
 app.use("/static",express.static("static"))
-app.use("/files", express.static("files"))
+// app.use("/files", express.static("files"))
+app.get("/files/:id", (req, res) => {
+  const id = req.params.id;
+  const filePath = path.join(__dirname, "files", id);
+  res.download(filePath, err => {
+    if (err) {
+      res.status(404).send("Fayl topilmadi.");
+    }
+  });
+});
 app.use("/api",require("./routes/index"))
 // Error handling
 
