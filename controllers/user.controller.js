@@ -20,6 +20,16 @@ class UserContorller{
 		}
 	}
 
+	async deleteUser(req, res, next) {
+		try {
+			const id = req.params.id
+			const users = await userModel.findByIdAndDelete(id)
+			return res.json({ status:200 })
+		} catch (error) {
+			next(error)
+		}
+	}
+
 	 
 }
 module.exports = new UserContorller()
